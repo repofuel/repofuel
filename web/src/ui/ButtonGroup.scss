@@ -1,0 +1,21 @@
+.button-group .mdc-button:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.button-group .mdc-button:not(:last-child) {
+  border-right-style: none;
+}
+
+.button-group .mdc-button:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.button-group .mdc-button:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.button-group {
+  display: inline-block;
+}

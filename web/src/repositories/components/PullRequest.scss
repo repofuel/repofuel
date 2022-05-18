@@ -1,0 +1,21 @@
+.pull-request-description {
+  padding: 20px;
+  border: 1px solid lightgrey; // would like to import $divider-color variable here without breaking drawer
+  border-top: 0;
+}
+
+.pull-request-spacing {
+  margin-bottom: 10px;
+}
+
+.pull.closed {
+  color: #cb2431;
+}
+
+.pull.open {
+  color: #28a745;
+}
+
+.pull.merged {
+  color: #6f42c1;
+}

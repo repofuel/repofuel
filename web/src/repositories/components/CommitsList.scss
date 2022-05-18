@@ -1,0 +1,91 @@
+.hash-clip {
+  margin-right: 20px;
+}
+
+// hack to fix the platform icon position
+.hash-clip .material-icons.mdc-chip__icon--leading {
+  font-family: Roboto, sans-serif;
+}
+
+@media screen and (max-width: 840px) {
+  .hash-clip {
+    visibility: hidden;
+    display: none;
+  }
+}
+
+.risk-score {
+  display: inline-flex;
+  white-space: nowrap;
+
+  .risk-points_hide {
+    color: #ffffff;
+  }
+
+  .risk-points_holder {
+    color: #eeeeee;
+  }
+
+  .risk-points_0 {
+    color: #7cb342;
+  }
+
+  .risk-points_1 {
+    color: #aed581;
+  }
+
+  .risk-points_2 {
+    color: #dce775;
+  }
+
+  .risk-points_3 {
+    color: #cddc39;
+  }
+
+  .risk-points_4 {
+    color: #ffa726;
+  }
+
+  .risk-points_5 {
+    color: #fb8c00;
+  }
+
+  .risk-points_6 {
+    color: #ef6c00;
+  }
+
+  .risk-points_7 {
+    color: #e65100;
+  }
+
+  .risk-points_8 {
+    color: #e53935;
+  }
+
+  .risk-points_9 {
+    color: #b71c1c;
+  }
+
+  .risk-points_10 {
+    color: #d50000;
+  }
+
+  width: 52px;
+  justify-content: center;
+}
+
+.risk-score:hover {
+  cursor: pointer;
+}
+
+.commit-meta {
+  white-space: nowrap;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
+}

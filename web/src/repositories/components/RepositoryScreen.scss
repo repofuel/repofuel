@@ -1,0 +1,53 @@
+@import '../../variables';
+@import '~@material/theme/mdc-theme';
+
+.path-divider {
+  word-wrap: break-word;
+  margin: 0 0.25em;
+  color: #586069;
+}
+
+.list-close-icon {
+  margin-right: 0.5em;
+  font-size: 18px;
+  width: 18px !important;
+}
+
+.margin-left {
+  margin-left: 0.26em;
+}
+
+.margin-right {
+  margin-right: 0.26em;
+}
+
+.margin-top {
+  margin-top: 0.5em;
+}
+
+.margin-bottom {
+  margin-bottom: 0.5em;
+}
+
+.wrap-text {
+  //word-break: break-all;
+  word-break: break-word;
+}
+
+.center {
+  text-align: center;
+}
+
+.repo-header-status {
+  white-space: nowrap;
+  font-size: 0.8em;
+  margin-left: 1em;
+  color: var(
+    --mdc-theme-text-hint-on-background,
+    mdc-theme-prop-value('text-hint-on-background')
+  );
+}
+
+.repository-head + *:not(.progress-group) {
+  margin-top: 1.5em;
+}

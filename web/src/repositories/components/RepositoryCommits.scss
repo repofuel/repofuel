@@ -1,0 +1,23 @@
+.commit-list-select-container {
+  background-color: whitesmoke;
+
+  //border-bottom: solid 1px $divider-color;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.commit-list-select-container > *:not(:last-child) {
+  flex-grow: 5;
+}
+
+.slider-box {
+  min-width: 100px;
+  padding-top: 8px;
+}
+
+.slider-box-inner {
+  padding: 0 15px;
+}

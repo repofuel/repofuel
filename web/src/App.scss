@@ -1,0 +1,217 @@
+@import './variables';
+
+@import '~@material/dialog/mdc-dialog';
+@import '~@material/drawer/mdc-drawer';
+@import '~@material/top-app-bar/mdc-top-app-bar';
+@import '~@material/data-table/mdc-data-table';
+
+@import '~@material/linear-progress/mdc-linear-progress';
+@import '~@material/menu/mdc-menu';
+@import '~@material/menu-surface/mdc-menu-surface';
+@import '~@material/list/mdc-list';
+@import '~@material/select/mdc-select';
+@import '~@material/slider/mdc-slider';
+
+@import '~@material/card/mdc-card';
+@import '~@material/layout-grid/mdc-layout-grid';
+@import '~@material/button/mdc-button';
+@import '~@material/switch/mdc-switch';
+@import '~@material/fab/mdc-fab';
+
+@import '~@material/form-field/mdc-form-field';
+@import '~@material/radio/mdc-radio';
+@import '~@material/textfield/mdc-text-field';
+@import '~@material/floating-label/mdc-floating-label';
+@import '~@material/notched-outline/mdc-notched-outline';
+@import '~@material/line-ripple/mdc-line-ripple';
+@import '~@material/ripple/mdc-ripple';
+
+@import '~@material/typography/mdc-typography';
+
+@import '~@material/tab-bar/mdc-tab-bar';
+@import '~@material/tab/mdc-tab';
+@import '~@material/tab-scroller/mdc-tab-scroller';
+@import '~@material/tab-indicator/mdc-tab-indicator';
+
+@import '~@material/chips/mdc-chips';
+@import '~@material/icon-button/mdc-icon-button';
+@import '~@material/elevation/mdc-elevation';
+
+@import '~@rmwc/avatar/avatar.css';
+@import '~@rmwc/circular-progress/circular-progress.css';
+@import '~@rmwc/tooltip/tooltip.css';
+
+.mdc-switch + label {
+  margin-left: 10px;
+}
+
+li.mdc-list-divider {
+  // this is a workaround
+  list-style: none;
+}
+
+.mdc-top-app-bar__title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.word-break-all {
+  word-break: break-all;
+}
+
+.mdc-list--avatar-list .rmwc-avatar {
+  // todo: use scss and mdc vars
+  background: rgba(81, 66, 129, 0.12);
+}
+
+.mdc-card > .divided-list {
+  padding: 0;
+}
+
+.divided-list > *:not(:first-child),
+.divided-list > *:not(:first-child) {
+  border-top: 1px solid $divider-color;
+}
+
+.divided-collapsible-list > *:not(:first-child) {
+  border-top: 1px solid $divider-color;
+}
+
+a {
+  color: $links-color;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.mdc-button:hover {
+  text-decoration: none;
+}
+
+//code{
+//  //source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+//  font-family: SFMono-Medium, "SF Mono", "Segoe UI Mono", "Roboto Mono", "Ubuntu Mono", Menlo, Consolas, Courier, monospace;
+//}
+
+.float-right {
+  float: right;
+}
+
+.blankslate {
+  text-align: center;
+  padding: 5em 2em;
+  display: block;
+}
+
+.mdc-top-app-bar {
+  color: #3e2e66;
+  background-color: #ffffff;
+  border-bottom: solid 1px $divider-color;
+}
+
+.mdc-list.no-pointer > .mdc-list-item {
+  cursor: inherit !important;
+}
+
+.mdc-list.no-pointer > .mdc-list-item:active::after {
+  transition-duration: initial !important;
+  opacity: 0 !important;
+}
+
+.link {
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+p {
+  @extend .mdc-typography--body1;
+}
+
+small {
+  @extend .mdc-typography--caption;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.mdc-select__anchor {
+  width: 100%;
+}
+
+.drawer-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.drawer-app-content {
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.02); //todo:it should use the scss
+}
+
+.top-app-bar-fix-adjust {
+  display: flex;
+  width: 100%;
+}
+
+.mdc-drawer--dismissible {
+  top: auto;
+}
+
+.mdc-top-app-bar {
+  z-index: 7;
+}
+
+.fixed-width-layout {
+  max-width: 1280px;
+}
+
+.small-profile-avatar {
+  border-radius: 50%;
+}
+
+.mdc-top-app-bar a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.mdc-top-app-bar a:hover {
+  text-decoration: none;
+}
+
+.mdc-top-app-bar .repofuel-logo {
+  display: block;
+  height: 30px;
+  width: 130px;
+}
+
+.mdc-top-app-bar .mdc-top-app-bar__navigation-icon {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+// workaround to fix the position
+.mdc-button i.mdc-button__icon {
+  height: unset;
+  font-size: unset;
+}

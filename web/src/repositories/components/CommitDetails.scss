@@ -1,0 +1,105 @@
+@import '../../variables';
+
+.commit-overview-list-item {
+  padding: 10px;
+}
+
+.commit-overview-options-tab-bar {
+  margin-bottom: 10px;
+  border-bottom: solid 1px lightgrey;
+}
+
+.commit-overview-risk-classification {
+  padding: 10px;
+  text-align: left;
+}
+
+.tag-margin {
+  margin-right: 10px;
+}
+
+.metric-donut-margin {
+  margin-bottom: 15px;
+}
+
+.details-summary {
+  padding: 20px 0 5px 0;
+  display: flex;
+  height: 30px;
+  vertical-align: middle;
+  line-height: 16px;
+}
+
+.details-summary .details-icon {
+  height: 17px;
+  margin-right: 0.26em;
+}
+
+.details-summary-button {
+  color: $links-color;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.details-summary-button:hover {
+  text-decoration: underline;
+}
+
+.metric-card {
+  padding: 0.4em 1em 1em;
+}
+
+.metric {
+  text-align: center;
+}
+
+.commit .sha,
+.commit .sha-block {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  //font-size: 12px;
+}
+
+.radar-box {
+  position: relative;
+  width: 50%;
+  float: left;
+}
+
+.radar-box:after {
+  content: '';
+  display: block;
+  padding-bottom: 66%;
+}
+
+.radar-box-content {
+  position: absolute;
+  color: #6a737d;
+  font-size: 0.9em;
+}
+
+.radar-box-0 {
+  bottom: 21%;
+  right: 21%;
+}
+
+.radar-box-1 {
+  bottom: 21%;
+  left: 21%;
+}
+
+.radar-box-2 {
+  top: 21%;
+  right: 21%;
+}
+
+.radar-box-3 {
+  top: 21%;
+  left: 21%;
+}
+
+.commit-summaries {
+  margin: 4px;
+  padding: 4px;
+}

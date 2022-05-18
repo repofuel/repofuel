@@ -1,0 +1,21 @@
+// https://material.io/resources/color/#!/?view.left=1&view.right=1&primary.color=37474F&secondary.color=4f6a77&primary.text.color=ffffff&secondary.text.color=ffffff
+// https://material.io/resources/color/#!/?view.left=1&view.right=0&secondary.color=3e2e66&primary.color=514281
+@use "~@material/theme" with (
+  $primary: #514281,
+  $secondary: #3e2e66,
+  $on-primary: #ffffff,
+  $on-secondary: #ffffff,
+  $background: #ffffff,
+);
+@use "~@material/theme/functions" as theme-functions;
+@use "~@material/theme/variables" as theme-variables;
+@use '~@material/list/variables' as list-variables;
+
+//$links-color: #5b00a7;
+$links-color: rgb(0, 119, 204);
+
+$divider-color: if(
+  theme-functions.tone(theme-variables.$background) == 'dark',
+  list-variables.$divider-color-on-dark-bg,
+  list-variables.$divider-color-on-light-bg
+);

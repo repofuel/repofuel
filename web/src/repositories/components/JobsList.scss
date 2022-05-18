@@ -1,0 +1,33 @@
+@import '~@material/typography/mdc-typography';
+
+.sub-process {
+  display: flex;
+  padding: 2px 5%;
+}
+
+//.start-stop-button {
+//  float: right
+//}
+
+.sub-process-divider {
+  padding: 0 3%;
+  margin: auto;
+}
+
+.process-action {
+  margin: auto;
+}
+
+.process-time {
+  @extend .mdc-typography--caption;
+  //todo: refactor to use the scss variables
+
+  //font-size: 90%;
+  margin-left: auto;
+  margin-right: 0;
+  padding: 0 5px;
+}
+
+.process-time:hover {
+  cursor: pointer;
+}

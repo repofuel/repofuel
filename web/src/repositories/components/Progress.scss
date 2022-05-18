@@ -1,0 +1,18 @@
+@import '../../variables';
+@import '~@material/typography/mdc-typography';
+@import '~@material/list/mdc-list';
+
+.progress-group .mdc-linear-progress {
+  padding-top: 0.8em;
+}
+
+.progress-group:hover .progress-caption {
+  visibility: visible;
+}
+
+.progress-caption {
+  @extend .mdc-typography--caption;
+  @extend .mdc-list-item__secondary-text;
+  padding-bottom: 0.8em;
+  visibility: hidden;
+}

@@ -1,0 +1,53 @@
+.risk-chart-dash {
+  height: 60px;
+  width: 120px;
+  font-size: 20px;
+  display: inline-block;
+  position: absolute;
+  //margin: -10px 0 0;
+  float: right;
+  top: 20px;
+  right: 0px;
+}
+
+.masonry-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: auto;
+  margin-top: 24px;
+}
+
+.masonry-grid_column {
+  padding: 0 12px;
+}
+
+.masonry-grid_column:first-child {
+  padding-left: 0;
+}
+
+.masonry-grid_column:last-child {
+  padding-right: 0;
+}
+
+.masonry-grid_column > div {
+  margin-bottom: 24px;
+}
+
+@media (max-width: 839px) {
+  .masonry-grid {
+    margin-top: 16px;
+  }
+  .masonry-grid-width {
+    max-width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .masonry-grid_column {
+    padding: 0;
+  }
+
+  .masonry-grid_column > div {
+    margin-bottom: 16px;
+  }
+}

@@ -1,0 +1,725 @@
+directive @goModel(
+  model: String
+  models: [String!]
+) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
+directive @goField(
+  forceResolver: Boolean
+  name: String
+) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+
+scalar DateTime
+
+enum Role {
+  SITE_ADMIN
+  SERVICE
+}
+
+enum Tag {
+  Code
+  NoneCode
+  Fix
+  Bug
+  Add
+  Update
+  Feature
+  Tests
+  Documentations
+  Refactor
+  License
+  Build
+  CI
+  TechnicalDebt
+  Style
+  Release
+  Dependencies
+  GeneratedCode
+  PerformanceImprovements
+  Reverts
+  MiscellaneousChores
+}
+
+enum PredictionStatus {
+  UnknownState
+  LastModel
+  Ok
+  LowTrainingData
+  ClassUnbalanced
+  LowModelQuality
+  FailDataPreparing
+  FailTraining
+  FailPredicting
+}
+
+enum Stage {
+  QUEUED
+  ADDED
+  CLONING
+  CLONED
+  FETCHING
+  FETCHED
+  INGESTING
+  INGESTED
+  ANALYZING
+  ANALYZED
+  PREDICTING
+  PREDICTED
+  READY
+  FAILED
+  CANCELED
+  WATCHED
+  RECOVERED
+  PROGRESSING
+}
+
+enum DeltaType {
+  DELETED
+  UNMODIFIED
+  ADDED
+  MODIFIED
+  RENAMED
+  COPIED
+  IGNORED
+  UNTRACKED
+  TYPECHANGE
+  UNREADABLE
+  CONFLICTED
+  OTHER
+}
+
+enum OrderDirection {
+  ASC
+  DESC
+}
+
+enum RepositoryAffiliation {
+  OWNER
+  COLLABORATOR
+  MONITOR
+}
+
+interface Node {
+  id: ID!
+}
+
+type Query {
+  viewer: User!
+  repository(provider: String!, owner: String!, name: String!): Repository
+  repositories(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+  ): RepositoryConnection!
+  organizations(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+  ): OrganizationConnection!
+
+  organization(provider: String!, owner: String!): Organization
+  node(id: ID!): Node
+  activity: Activity
+  feedback(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+  ): FeedbackConnection
+}
+
+type FeedbackConnection {
+  edges: [FeedbackEdge]
+  pageInfo: PageInfo!
+  totalCount: Int!
+  nodes: [Feedback]
+}
+
+type FeedbackEdge {
+  cursor: String!
+  node: Feedback
+}
+
+enum Period {
+  DAY
+  WEEK
+  MONTH
+  YEAR
+  ALL_TIME
+}
+
+enum Frequency {
+  DAILY
+  MONTHLY
+  YEARLY
+}
+
+#todo: Deprecate this type
+type Activity {
+  repositoriesTotalCount(period: Period): Int!
+  repositoriesCount(
+    period: Period
+    frequency: Frequency!
+  ): CountOverTimeConnection
+  organizationsTotalCount(period: Period): Int!
+  organizationsCount(
+    period: Period
+    frequency: Frequency!
+  ): CountOverTimeConnection
+  #    usersTotalCount: Int!
+  #    usersCount: CountOverTimeConnection
+  commitsAnalyzedTotalCount(period: Period): Int!
+  commitsAnalyzedCount(
+    period: Period
+    frequency: Frequency!
+  ): CountOverTimeConnection
+  commitsPredictTotalCount(period: Period): Int!
+  commitsPredictCount(
+    period: Period
+    frequency: Frequency!
+  ): CountOverTimeConnection
+  jobsTotalCount(period: Period): Int!
+  jobsCount(period: Period, frequency: Frequency!): CountOverTimeConnection
+  pullRequestAnalyzedTotalCount(period: Period): Int!
+  pullRequestAnalyzedCount(
+    period: Period
+    frequency: Frequency!
+  ): CountOverTimeConnection
+
+  viewsTotalCount(period: Period): Int!
+  visitorsTotalCount(period: Period): Int!
+  visitCount(period: Period, frequency: Frequency!): VisitOverTimeConnection
+}
+
+type Subscription {
+  changeProgress(ids: [ID!]!): ProgressEvent!
+}
+
+type UserProviderInfo {
+  provider: String!
+  id: String!
+  username: String
+  fullName: String
+  avatarURL: String
+  location: String
+  homePage: String
+}
+
+type User implements Node {
+  id: ID!
+  username: String
+  firstName: String
+  lastName: String
+  avatarUrl: String
+  role: Role
+  providers: [UserProviderInfo]
+
+  repositories(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+    ownerAffiliations: [RepositoryAffiliation!]
+  ): RepositoryConnection!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+#todo: should be a interface
+type Owner {
+  id: ID! #fixme: the id is not global
+  slug: String!
+}
+
+type Organization implements Node {
+  id: ID!
+  owner: Owner!
+  providerSCM: String!
+  avatarURL: String
+  providerSetupURL: String
+  repositories(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+  ): RepositoryConnection!
+  viewerCanAdminister: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Repository implements Node & Progressable {
+  id: ID!
+  databaseId: String! # todo: reconsedr if we want to expose it
+  name: String!
+  status: Stage!
+  providerSCM: String!
+  source: RepositorySource!
+  commit(hash: String!): Commit
+  pullRequest(number: Int!): PullRequest
+  owner: Owner!
+  progress: Progress
+  checksConfig: ChecksConfig
+  viewerIsMonitor: Boolean!
+  monitorCount: Int!
+
+  commits(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+    filters: CommitFilters
+  ): CommitConnection!
+  pullRequests(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+  ): PullRequestConnection!
+  jobs(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+  ): JobConnection!
+
+  branches: [Branch!]!
+  developerEmails: [String!] #todo: should be replaced with developer connection
+  developerNames: [String!] #todo: should be replaced with developer connection
+  Confidence: Float
+  #    PredictionStatus: PredictionStatus #todo: should be used instad on int
+  PredictionStatus: Int
+
+  commitsCount: Int
+  commitPredictionsCount: Int
+  buggyCommitsCount: Int
+  fixCommitsCount: Int
+  branchesCount: Int
+  contributorsCount: Int
+  collaboratorsCount: Int
+  buggyCommitsOverTime: CountOverTimeConnection
+  commitsOverTime: CountOverTimeConnection
+  tagsCount: TagsCountConnection
+  avgEntropyOverTime: AvgOverTimeConnection
+  avgCommitFilesOverTime: AvgOverTimeConnection
+
+  """
+  Indicates whether the viewer has admin permissions on this repository.
+  """
+  viewerCanAdminister: Boolean!
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ChecksConfig {
+  enable: Boolean!
+}
+
+type RepositorySource {
+  id: String!
+  repoName: String!
+  url: String!
+  defaultBranch: String!
+  description: String
+  private: Boolean!
+  createdAt: DateTime!
+}
+
+interface Progressable {
+  id: ID!
+  status: Stage!
+  progress: Progress
+}
+
+type ProgressEvent {
+  target: ID!
+  progress: Progress!
+}
+
+type Progress {
+  status: Stage!
+  total: Int
+  current: Int
+}
+
+type RepositoryConnection {
+  edges: [RepositoryEdge]
+  pageInfo: PageInfo!
+  totalCount: Int!
+  nodes: [Repository]
+}
+
+type RepositoryEdge {
+  cursor: String!
+  node: Repository
+}
+
+type OrganizationConnection {
+  edges: [OrganizationEdge]
+  pageInfo: PageInfo!
+  totalCount: Int!
+  nodes: [Organization]
+}
+
+type OrganizationEdge {
+  cursor: String!
+  node: Organization
+}
+
+#todo: inline the fillters
+input CommitFilters {
+  branch: String
+  developerName: String
+  minRisk: Float
+  maxRisk: Float
+}
+
+type Developer {
+  name: String!
+  email: String!
+}
+
+type TagsCountConnection {
+  nodes: [TagCount!]
+}
+
+type TagCount {
+  tag: Tag!
+  count: Int!
+}
+
+type VisitOverTimeConnection {
+  nodes: [VisitOverTime!]
+}
+
+type VisitOverTime {
+  date: String!
+  visitors: Int!
+  views: Int!
+}
+
+type AvgOverTimeConnection {
+  nodes: [AvgOverTime!]
+}
+
+type AvgOverTime {
+  date: String!
+  avg: Float!
+}
+
+type CountOverTimeConnection {
+  nodes: [CountOverTime!]
+}
+
+type CountOverTime {
+  date: String!
+  count: Int!
+}
+
+type CommitConnection {
+  edges: [CommitEdge]
+  pageInfo: PageInfo!
+  totalCount: Int!
+  nodes: [Commit]
+}
+
+type CommitEdge {
+  cursor: String!
+  node: Commit
+}
+
+type PullRequestConnection {
+  edges: [PullRequestEdge]
+  pageInfo: PageInfo!
+  totalCount: Int!
+  nodes: [PullRequest]
+}
+
+type PullRequestEdge {
+  cursor: String!
+  node: PullRequest
+}
+
+type PullRequest implements Node & Progressable {
+  id: ID!
+  status: Stage!
+  progress: Progress
+  source: PullRequestSource!
+  commits(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+  ): CommitConnection!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum PullRequestState {
+  #A pull request that is still open.
+  OPEN
+  # A pull request that has been closed without being merged.
+  CLOSED
+  # A pull request that has been closed by being merged
+  MERGED
+}
+
+type PullRequestSource {
+  id: String
+  number: Int!
+  title: String!
+  body: String
+  closed: Boolean!
+  closedAt: DateTime
+  mergedAt: DateTime
+  merged: Boolean!
+  head: Branch
+  base: Branch
+  #    state: PullRequestState # todo
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Branch {
+  name: String!
+  sha: String!
+  cloneURL: String
+}
+
+type Commit implements Node {
+  id: ID!
+  hash: String!
+  author: Signature!
+  message: String!
+  metrics: ChangeMeasures
+  analysis: CommitAnalysis
+  tags: [String!]!
+  deletedTags: [String!]!
+  files: [CommitFile!]! #todo: we could use connections
+  fix: Boolean!
+  fixed: Boolean!
+  fixes(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    direction: OrderDirection
+  ): CommitConnection
+  issues: [Issue!] #todo: we could use connections
+  repository: Repository!
+}
+
+type CommitAnalysis {
+  bugPotential: Float!
+  indicators: BugIndicators!
+  insights: [Insight!]
+}
+
+type Issue {
+  id: String! #todo: refactor the code to use node ID! and implement the node interface
+  bug: Boolean!
+  fetched: Boolean!
+  createdAt: DateTime
+}
+
+type Insight {
+  icon: String
+  name: String!
+  description: String
+  color: String
+}
+
+type CommitFile {
+  path: String!
+  oldPath: String
+  subsystem: String!
+  fix: Boolean!
+  action: DeltaType!
+  type: String
+  language: String
+  fixing: [Commit!]
+  metrics: FileMeasures
+  insights: [Insight!]
+}
+
+type FileMeasures {
+  la: Float!
+  ld: Float!
+  ha: Float!
+  hd: Float!
+  lt: Float!
+  ndev: Float!
+  age: Float!
+  nuc: Float!
+}
+
+type Signature {
+  name: String!
+  email: String!
+  date: DateTime!
+}
+
+type ChangeMeasures {
+  "Number of modified subsystems."
+  ns: Float!
+  "Number of modified directories."
+  nd: Float!
+  "Number of modified files."
+  nf: Float!
+  "Entropy (distribution) of the changes."
+  entropy: Float!
+  "Lines added."
+  la: Float!
+  "Lines deleted."
+  ld: Float!
+  ha: Float!
+  hd: Float!
+  "Total lines."
+  lt: Float!
+  "Number of developers contributing."
+  ndev: Float!
+  "Age from last change."
+  age: Float!
+  "Number of unique changes."
+  nuc: Float!
+  "Developer experience."
+  exp: Float!
+  "Recent developer experience."
+  rexp: Float!
+  "Subsystem developer experience."
+  sexp: Float!
+}
+
+type BugIndicators {
+  experience: Float
+  history: Float
+  size: Float
+  diffusion: Float
+}
+
+type JobConnection {
+  edges: [JobEdge]
+  pageInfo: PageInfo!
+  totalCount: Int!
+  nodes: [Job]
+}
+
+type JobEdge {
+  cursor: String!
+  node: Job
+}
+
+enum JobInvoker {
+  REPOSITORY_ADD
+  REPOSITORY_PUSH
+  REPOSITORY_RECOVER
+  REPOSITORY_REFRESH
+  REPOSITORY_ADMIN_TRIGGER
+
+  PULL_REQUEST_ADD
+  PULL_REQUEST_UPDATE
+  PULL_REQUEST_RECOVER
+  PULL_REQUEST_REFRESH
+  PULL_REQUEST_ADMIN_TRIGGER
+}
+
+type JobLogEntry {
+  status: Stage!
+  statusText: String!
+  startedAt: DateTime!
+}
+
+type Job {
+  id: ID!
+  invoker: JobInvoker!
+  #    repository: Repository
+  statusLog: [JobLogEntry!] #todo: Implement local connection for empeded arrays
+  error: String
+  createdAt: DateTime!
+}
+
+type Feedback {
+  id: ID!
+  # todo: add the sender
+  sender: User!
+  message: String!
+  target: Commit
+  createdAt: DateTime!
+}
+
+type Mutation {
+  updateRepository(input: UpdateRepositoryInput!): UpdateRepositoryPayload
+  sendCommitFeedback(input: SendCommitFeedbackInput!): Feedback
+  addPublicRepository(
+    input: AddPublicRepositoryInput!
+  ): AddPublicRepositoryPayload
+  stopRepositoryMonitoring(id: ID!): StopRepositoryMonitoringPayload
+  monitorRepository(id: ID!): MonitorRepositoryPayload
+  deleteRepository(id: ID!): DeleteRepositoryPayload
+  deleteCommitTag(input: DeleteCommitTagInput!): DeleteCommitTagPayload
+}
+
+type UpdateRepositoryPayload {
+  repository: Repository
+  errors: [String!]!
+}
+
+input UpdateRepositoryInput {
+  id: ID!
+  checksConfig: ChecksConfigInput
+}
+
+input ChecksConfigInput {
+  enable: Boolean!
+}
+
+input SendCommitFeedbackInput {
+  commitID: ID!
+  message: String!
+}
+
+input AddPublicRepositoryInput {
+  provider: String!
+  nameWithOwner: String!
+}
+
+type AddPublicRepositoryPayload {
+  repository: Repository
+  errors: [String!]!
+}
+
+type DeleteRepositoryPayload {
+  repository: Repository
+}
+
+type StopRepositoryMonitoringPayload {
+  repository: Repository
+}
+
+type MonitorRepositoryPayload {
+  repository: Repository
+}
+
+input DeleteCommitTagInput {
+  commitID: ID!
+  tag: Tag!
+}
+
+type DeleteCommitTagPayload {
+  commit: Commit
+}

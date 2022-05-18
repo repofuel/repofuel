@@ -1,0 +1,53 @@
+@import '../variables';
+@import '~@material/typography/mdc-typography';
+
+.mdc-card + .section__header {
+  margin-top: 1rem;
+}
+
+.section__header {
+  @extend .mdc-typography--headline5;
+  padding: 0.5rem 0 0.4rem;
+  margin: 0 0 0.75rem;
+  border-bottom: 2px solid $divider-color;
+}
+
+.section__body {
+  margin: 0 0 1.5rem;
+}
+
+.subsection__header {
+  @extend .mdc-typography--subtitle1;
+  padding: 0.5rem 0 0.4rem;
+  margin: 0 0 0.75rem;
+  border-bottom: 1.75px solid $divider-color;
+}
+
+.card__header {
+  @extend .mdc-typography--headline6;
+  padding: 0.5rem 0 0.4rem;
+  margin: 0 1rem;
+  border-bottom: 1px solid $divider-color;
+}
+
+.card__body {
+  padding: 1rem;
+}
+
+.form__actions {
+  display: block;
+  margin: 1.5rem 0 0;
+}
+
+.radio-container {
+  display: inline-block;
+  margin: 0 2rem 1rem 0;
+}
+
+.text-field-container {
+  margin-bottom: 1.5rem;
+}
+
+.text-field-container .mdc-text-field {
+  width: 100%;
+}

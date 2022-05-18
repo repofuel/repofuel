@@ -1,0 +1,29 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal.mdc-dialog .mdc-dialog__surface {
+  min-width: 1200px;
+  min-height: 600px;
+  position: absolute;
+}
+
+@media (max-width: 1200px) {
+  .modal.mdc-dialog .mdc-dialog__container,
+  .modal.mdc-dialog .mdc-dialog__surface {
+    min-width: 100%;
+    border-radius: 0;
+    max-height: 100%;
+    min-height: 100%;
+  }
+}
+
+.modal.mdc-dialog .mdc-dialog__content {
+  color: inherit;
+  line-height: inherit;
+}

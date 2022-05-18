@@ -1,0 +1,7 @@
+sklearn
+pandas
+numpy
+skl2onnx
+onnxruntime
+
+requests
