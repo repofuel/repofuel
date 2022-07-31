@@ -2,7 +2,7 @@
 
 set -e
 
-LIBGIT2_VER=${LIBGIT2_VER-"master"}
+LIBGIT2_VER=${LIBGIT2_VER-"main"}
 LIBGIT2_PATH=${HOME}/libgit2/libgit2-${LIBGIT2_VER}
 GIT2GO_MAJOR_VER=${GIT2GO_MAJOR_VER-"v31"}
 GIT2GO_VER=$(go list -f '{{.Version}}' -m github.com/libgit2/git2go/"${GIT2GO_MAJOR_VER}")
