@@ -1,0 +1,7 @@
+.idea
+.DS_Store
+.env
+venv
+/db
+/keys
+/configs
