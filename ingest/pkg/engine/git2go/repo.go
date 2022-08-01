@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	git "github.com/libgit2/git2go/v30"
+	git "github.com/libgit2/git2go/v31"
 	"github.com/repofuel/repofuel/ingest/pkg/engine"
 	"github.com/repofuel/repofuel/ingest/pkg/identifier"
 	"github.com/rs/zerolog/log"

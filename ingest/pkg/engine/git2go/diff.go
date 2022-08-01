@@ -1,7 +1,7 @@
 package git2go
 
 import (
-	git "github.com/libgit2/git2go"
+	git "github.com/libgit2/git2go/v31"
 	"github.com/repofuel/repofuel/ingest/pkg/engine"
 	"github.com/rs/zerolog/log"
 )

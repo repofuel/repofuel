@@ -19,8 +19,6 @@ require (
 	github.com/google/go-github/v32 v32.1.0
 	github.com/joho/godotenv v1.4.0
 	github.com/kljensen/snowball v0.6.0
-	github.com/libgit2/git2go v0.28.4
-	github.com/libgit2/git2go/v30 v30.6.9
 	github.com/libgit2/git2go/v31 v31.7.9
 	github.com/reiver/go-porterstemmer v1.0.1
 	github.com/rs/zerolog v1.26.1
