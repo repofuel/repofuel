@@ -1,0 +1,10 @@
+# Ignore artifacts:
+build
+coverage
+
+# Ignore generated files:
+__generated__
+package-lock.json
+
+# Ignore external files:
+src/graphql/schema.graphql
