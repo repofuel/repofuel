@@ -1,0 +1,86 @@
+name: Go CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - web/**
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - web/**
+
+env:
+  GOPRIVATE: "github.com/repofuel/repofuel-*"
+  GO111MODULE: on
+  CGO_ENABLED: 1
+  GOOS: linux
+  LIBGIT2_VER: "1.1.0"
+  LIBGIT2_INSTALL_PATH: "/tmp/libgit2"
+  GIT2GO_MAJOR_VER: "v31"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        go-version: [1.18]
+
+    steps:
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Get system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends cmake libssl-dev libssh2-1-dev
+          LIBGIT2_PKG_CONFIG_PATH=${LIBGIT2_INSTALL_PATH}/lib/pkgconfig
+          echo "PKG_CONFIG_PATH=${LIBGIT2_PKG_CONFIG_PATH}:${PKG_CONFIG_PATH}" >> $GITHUB_ENV
+          mkdir -p "${LIBGIT2_PKG_CONFIG_PATH}"
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Cache GO modules
+        uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
+
+      - name: Get GO dependencies
+        run: go get -v -t -d ./...
+
+      - name: Cache libgit2
+        id: cache-libgit2
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.LIBGIT2_INSTALL_PATH }}
+          key: ${{ runner.os }}-libgit2-${{ env.LIBGIT2_VER }}
+
+      - name: Build libgit2
+        if: steps.cache-libgit2.outputs.cache-hit != 'true'
+        run: |
+          LIBGIT2_VER=$LIBGIT2_VER \
+          GIT2GO_MAJOR_VER=$GIT2GO_MAJOR_VER \
+          SYSTEM_INSTALL_PREFIX=$LIBGIT2_INSTALL_PATH \
+          sh ./ingest/script/build-libgit2.sh --static --system
+
+      - name: Build ingest
+        run: go build --tags "static,system_libgit2" ./ingest/cmd/http-server
+
+      - name: Test ingest
+        run: go test -tags "static,system_libgit2" ./ingest/...
+
+      - name: Build accounts
+        run: go build ./accounts/cmd/http-server
+
+      - name: Test accounts
+        run: go test ./accounts/...
+
+      - name: Build ml
+        run: go build ./ml/cmd/http-server
