@@ -1,0 +1,43 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/Dockerfile"
+      - "**/.dockerignore"
+      - ".github/workflows/dockerimage.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/Dockerfile"
+      - "**/.dockerignore"
+      - ".github/workflows/dockerimage.yml"
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        dockerfile-scope: [web, accounts, ml, ingest]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.dockerfile-scope }} container image to registry
+        uses: docker/build-push-action@v2
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.dockerfile-scope }}/http-server:latest
+          context: .
+          file: ./${{ matrix.dockerfile-scope }}/Dockerfile
