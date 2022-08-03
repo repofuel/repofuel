@@ -1,0 +1,35 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [dev-server]
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        dockerfile-scope: [web, accounts, ml, ingest]
+
+    env:
+      IMAGE_TAG: ghcr.io/${{ github.repository_owner }}/${{ matrix.dockerfile-scope }}/http-server:latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v1
+
+      - name: Build the Docker image for ${{ matrix.dockerfile-scope }}
+        run: docker build -f ${{ matrix.dockerfile-scope }}/Dockerfile . --tag $IMAGE_TAG
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push the Docker image for ${{ matrix.dockerfile-scope }}
+        run: docker push $IMAGE_TAG
