@@ -11,7 +11,6 @@ import {
 } from '@rmwc/top-app-bar';
 import {Drawer, DrawerAppContent} from '@rmwc/drawer';
 import {Button} from '@rmwc/button';
-import {Typography} from '@rmwc/typography';
 import {CircularProgress} from '@rmwc/circular-progress';
 import {ProfileMenu} from '../account/components/ProfileMenu';
 import '@rmwc/circular-progress/styles';
@@ -20,12 +19,6 @@ import {ThreeBarsIcon} from '@primer/octicons-react';
 
 const Content = styled.div`
   flex: 1 0 auto;
-`;
-
-const Footer = styled.footer`
-  flex-shrink: 0;
-  padding: 25px 24px 10px;
-  text-align: center;
 `;
 
 const Layout: React.FC<any> = ({children, menuItems}) => {
@@ -71,11 +64,6 @@ const Layout: React.FC<any> = ({children, menuItems}) => {
 
       <DrawerAppContent className="drawer-app-content mdc-top-app-bar--fixed-adjust">
         <Content>{children}</Content>
-        <Footer>
-          <Typography use="subtitle2">
-            © 2020 Repofuel v{process.env.REACT_APP_VERSION}
-          </Typography>
-        </Footer>
       </DrawerAppContent>
     </div>
   );
