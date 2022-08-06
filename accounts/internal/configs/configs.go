@@ -112,7 +112,7 @@ func (cfg *Configs) Oauth1Config(p common.Name) *oauth1.Config {
 }
 
 func Parse() (*Configs, error) {
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load(".env", "accounts/.env"); err != nil {
 		log.Println("missing .env file, will continue without it")
 	}
 

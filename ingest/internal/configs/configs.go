@@ -39,7 +39,7 @@ type Configs struct {
 }
 
 func Parse(ctx context.Context) (*Configs, error) {
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load(".env", "ingest/.env"); err != nil {
 		log.Ctx(ctx).Debug().Msg("missing .env file, will continue without it")
 	}
 

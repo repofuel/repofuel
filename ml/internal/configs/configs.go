@@ -17,7 +17,7 @@ type Configs struct {
 }
 
 func Parse() (*Configs, error) {
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load(".env", "ml/.env"); err != nil {
 		log.Println("missing .env file, will continue without it")
 	}
 
