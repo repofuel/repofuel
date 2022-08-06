@@ -15,13 +15,13 @@ RUN	go build -o /http-server ./ml/cmd/http-server \
 
 FROM python:3.7-slim-buster
 
-COPY ./ml/python /python
+COPY ./ml/python /ml/python
 COPY --from=builder /http-server .
 
 RUN apt-get update && apt-get install -y \
 	ca-certificates \
 	&& update-ca-certificates --fresh \
 	&& rm -rf /var/lib/apt/lists/* \
-	&& pip3 install --no-cache-dir -r /python/requirments.txt
+	&& pip3 install --no-cache-dir -r /ml/python/requirments.txt
 
 CMD ./http-server

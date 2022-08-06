@@ -25,7 +25,7 @@ func (h *Handler) Routes() http.Handler {
 		middleware.Recoverer,
 	)
 
-	r.Mount("/ai", h.rest.Routes())
+	r.Mount("/ml", h.rest.Routes())
 
 	r.Mount("/debug", middleware.Profiler())
 

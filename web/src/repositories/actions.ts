@@ -263,7 +263,7 @@ export const fetchModels = (
   return (dispatch, getState) => {
     //todo: if do not request if the user do not have the permissions
     dispatch(fetchModelsRequest(addr));
-    authRequest('GET', `/ai/repositories/${repo_id}/models`)
+    authRequest('GET', `/ml/repositories/${repo_id}/models`)
       .then(parsJsonLines)
       .then((data) => dispatch(fetchModelsSuccess(addr, data)))
       .catch((err) => dispatch(fetchModelsFail(addr, err)));

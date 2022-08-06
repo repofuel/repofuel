@@ -20,7 +20,7 @@ const (
 type Client struct {
 	client    *http.Client
 	Ingest    *IngestService
-	AI        *AIService
+	ML        *MLService
 	Accounts  *AccountsService
 	UserAgent string
 }
@@ -75,7 +75,7 @@ func NewClient(client *http.Client, opts *Options) *Client {
 	}
 
 	c.Ingest = &IngestService{c, opts.BaseURLs["ingest"]}
-	c.AI = &AIService{c, opts.BaseURLs["ai"]}
+	c.ML = &MLService{c, opts.BaseURLs["ml"]}
 	c.Accounts = &AccountsService{c, opts.BaseURLs["accounts"]}
 
 	return c

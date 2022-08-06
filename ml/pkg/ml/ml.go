@@ -57,11 +57,11 @@ type PredictionResult struct {
 }
 
 func (err *ModelError) Error() string {
-	return fmt.Sprintf("AI service failed in %s stage", err.Stage)
+	return fmt.Sprintf("ML service failed in %s stage", err.Stage)
 }
 
 func (err *ModelError) String() string {
-	return fmt.Sprintf("AI service failed in %s stage: %s", err.Stage, err.Message)
+	return fmt.Sprintf("ML service failed in %s stage: %s", err.Stage, err.Message)
 }
 
 type ModelServer struct {
@@ -159,7 +159,7 @@ func (s *ModelServer) cmdBuild(ctx context.Context, repoID, modelPath, lastJob s
 		return nil, err
 	}
 
-	cmd := exec.CommandContext(ctx, pythonExec, "./python/main.py",
+	cmd := exec.CommandContext(ctx, pythonExec, "./ml/python/main.py",
 		"--ingest-url", s.ingestURL,
 		"--auth", "Bearer "+token.AccessToken,
 		"--repo-id", repoID,
@@ -182,7 +182,7 @@ func (s *ModelServer) cmdPredict(ctx context.Context, repoID, modelPath string, 
 		return nil, err
 	}
 
-	cmd := exec.CommandContext(ctx, pythonExec, "./python/main.py",
+	cmd := exec.CommandContext(ctx, pythonExec, "./ml/python/main.py",
 		"--ingest-url", s.ingestURL,
 		"--auth", "Bearer "+token.AccessToken,
 		"--repo-id", repoID,

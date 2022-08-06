@@ -8,7 +8,7 @@ import (
 	"github.com/repofuel/repofuel/pkg/metrics"
 )
 
-type AIService service
+type MLService service
 
 type PredictionStatus uint8
 
@@ -40,7 +40,7 @@ type Prediction struct {
 	Diffusion  float32 `json:"diffusion"`
 }
 
-func (s *AIService) PredictByJob(ctx context.Context, repoID string, currentJob string, oldestJob string) (*PredictionResult, *http.Response, error) {
+func (s *MLService) PredictByJob(ctx context.Context, repoID string, currentJob string, oldestJob string) (*PredictionResult, *http.Response, error) {
 	var u string
 	if oldestJob == "" {
 		u = fmt.Sprintf("repositories/%s/jobs/%s/prediction", repoID, currentJob)

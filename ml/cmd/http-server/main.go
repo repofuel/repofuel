@@ -15,7 +15,7 @@ import (
 	"github.com/repofuel/repofuel/pkg/mongocon"
 )
 
-const ServiceName = "ai"
+const ServiceName = "ml"
 
 func main() {
 	cfg, err := configs.Parse()

@@ -797,7 +797,7 @@ func Predict(ctx context.Context, p *process) error {
 		oldestJob = p.includeAfter.Hex()
 	}
 
-	res, _, err := p.mgr.srv.Repofuel.AI.PredictByJob(ctx, p.RepoID.Hex(), p.JobID.Hex(), oldestJob)
+	res, _, err := p.mgr.srv.Repofuel.ML.PredictByJob(ctx, p.RepoID.Hex(), p.JobID.Hex(), oldestJob)
 	if err != nil {
 		return err
 	}

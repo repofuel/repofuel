@@ -24,7 +24,7 @@ module.exports = function (app) {
     })
   );
   app.use(
-    '/ai/',
+    '/ml/',
     createProxyMiddleware({
       target: 'http://localhost:3004',
       changeOrigin: true,
