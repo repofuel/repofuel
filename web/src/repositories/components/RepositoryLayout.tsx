@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import {useFragment, useMutation} from 'react-relay/hooks';
+import {useFragment} from 'react-relay/hooks';
 import graphql from 'babel-plugin-relay/macro';
 import Layout, {PageSpinner} from '../../ui/Layout';
 import {Grid, GridCell} from '@rmwc/grid';
@@ -29,12 +29,6 @@ import {RepositoryLayout_Menu_repository$key} from './__generated__/RepositoryLa
 import './RepositoryScreen.scss';
 import {formatDistanceToNow} from 'date-fns';
 import {Helmet} from 'react-helmet';
-
-import {RepositoryLayout_MonitorMutation} from './__generated__/RepositoryLayout_MonitorMutation.graphql';
-import {RepositoryLayout_StopMonitoringMutation} from './__generated__/RepositoryLayout_StopMonitoringMutation.graphql';
-import {RepositoryLayout_MonitorButton_repository$key} from './__generated__/RepositoryLayout_MonitorButton_repository.graphql';
-import {ButtonGroup} from '../../ui/ButtonGroup';
-import {Button} from 'rmwc';
 import {NavListItem} from '../../ui/List';
 
 interface RepositoryLayoutProps {
@@ -53,7 +47,6 @@ export const RepositoryLayout: React.FC<RepositoryLayoutProps> = (props) => {
         status
         PredictionStatus
         viewerIsMonitor
-        ...RepositoryLayout_MonitorButton_repository
         ...RepositoryLayout_Menu_repository
         ...Progress_repository
       }
@@ -85,9 +78,7 @@ export const RepositoryLayout: React.FC<RepositoryLayoutProps> = (props) => {
 
       <Grid className="fixed-width-layout">
         <GridCell span={12}>
-          <RepositoryHeader {...repoAddr} status={status}>
-            <RepositoryMonitorButton repository={repository} />
-          </RepositoryHeader>
+          <RepositoryHeader {...repoAddr} status={status} />
           {IsWorking(repository.status) && (
             <RepositoryProgress repository={repository} />
           )}
@@ -188,75 +179,4 @@ const RepositoryMenu: React.FC<{
 
 const PathDivider: React.FC = () => {
   return <span className="path-divider">/</span>;
-};
-
-interface RepositoryMonitorButtonProps {
-  repository: RepositoryLayout_MonitorButton_repository$key;
-}
-
-const RepositoryMonitorButton: React.FC<RepositoryMonitorButtonProps> = (
-  props
-) => {
-  const repository = useFragment(
-    graphql`
-      fragment RepositoryLayout_MonitorButton_repository on Repository {
-        id
-        viewerIsMonitor
-        monitorCount
-      }
-    `,
-    props.repository
-  );
-
-  const [
-    commitSubscribe,
-    isSubscribeInFlight,
-  ] = useMutation<RepositoryLayout_MonitorMutation>(graphql`
-    mutation RepositoryLayout_MonitorMutation($repoID: ID!) {
-      monitorRepository(id: $repoID) {
-        repository {
-          ...RepositoryLayout_MonitorButton_repository
-        }
-      }
-    }
-  `);
-
-  const [
-    commitUnsubscribe,
-    isUnsubscribeInFlight,
-  ] = useMutation<RepositoryLayout_StopMonitoringMutation>(graphql`
-    mutation RepositoryLayout_StopMonitoringMutation($repoID: ID!) {
-      stopRepositoryMonitoring(id: $repoID) {
-        repository {
-          ...RepositoryLayout_MonitorButton_repository
-        }
-      }
-    }
-  `);
-
-  const commit = repository.viewerIsMonitor
-    ? commitUnsubscribe
-    : commitSubscribe;
-
-  function handleClick() {
-    commit({
-      variables: {
-        repoID: repository.id,
-      },
-    });
-  }
-
-  return (
-    <ButtonGroup className="float-right">
-      <Button
-        outlined
-        disabled={isSubscribeInFlight || isUnsubscribeInFlight}
-        onClick={handleClick}>
-        {repository.viewerIsMonitor ? 'Stop Monitoring' : 'Monitor'}
-      </Button>
-      <Button outlined disabled>
-        {repository.monitorCount}
-      </Button>
-    </ButtonGroup>
-  );
 };

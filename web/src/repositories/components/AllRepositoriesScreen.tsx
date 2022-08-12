@@ -13,8 +13,6 @@ import {PlusIcon, ProjectIcon} from '@primer/octicons-react';
 import {useLazyLoadQuery} from 'react-relay/hooks';
 import graphql from 'babel-plugin-relay/macro';
 import {AllRepositoriesScreenQuery} from './__generated__/AllRepositoriesScreenQuery.graphql';
-import {AddPublicRepository} from './AddPublicRepository';
-import {ButtonGroup} from '../../ui/ButtonGroup';
 
 interface AllRepositoriesScreenProps extends RouteComponentProps {}
 
@@ -48,18 +46,16 @@ export const AllRepositoriesScreen: React.FC<AllRepositoriesScreenProps> = ({
     <Layout menuItems={<SharedAccountsMenu viewer={viewer} />}>
       <Grid className="fixed-width-layout">
         <GridCell span={12} style={{textAlign: 'right'}}>
-          <ButtonGroup className="float-right">
-            <Button
-              unelevated
-              tag="a"
-              label="Add From Github"
-              icon={<PlusIcon />}
-              href="/accounts/apps/github/add_repository"
-              target="_blank"
-              rel="nofollow"
-            />
-            <AddPublicRepository />
-          </ButtonGroup>
+          <Button
+            unelevated
+            className="float-right"
+            tag="a"
+            label="Add From Github"
+            icon={<PlusIcon />}
+            href="/accounts/apps/github/add_repository"
+            target="_blank"
+            rel="nofollow"
+          />
         </GridCell>
         <GridCell span={12}>
           <Card outlined>
