@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {CommitsListItem, CommitsListSlimItem} from './CommitsList';
 import {RepositoryAddress} from '../types';
 import {GridCell, GridRow} from '@rmwc/grid';
@@ -15,7 +15,6 @@ import {
   XIcon,
 } from '@primer/octicons-react';
 import {formatDistanceToNow} from 'date-fns';
-import {Chart} from 'chart.js';
 import {Card} from '@rmwc/card';
 import {Typography} from '@rmwc/typography';
 import {Tooltip} from '@rmwc/tooltip';
@@ -171,7 +170,7 @@ export const CommitDetails: React.FC<CommitDetailsProps> = (props) => {
           </div>
         </Card>
       </GridCell>
-      <GridCell span={8}>
+      <GridCell span={12}>
         {/* <CommitTags
           repoAddr={props.repoAddr}
           commitHash={commit.hash}
@@ -199,18 +198,6 @@ export const CommitDetails: React.FC<CommitDetailsProps> = (props) => {
 
           {!!commit.files.length && <FileDetails files={commit.files} />}
         </div>
-      </GridCell>
-
-      <GridCell span={4} style={{position: 'relative'}}>
-        {/* <FeedbackBox>
-          <span>Is it bug free?</span>
-          <IconButton icon={<ThumbsupIcon />} label="Not buggy" />
-          <IconButton icon={<ThumbsdownIcon />} label="Buggy" />
-        </FeedbackBox> */}
-
-        {commit.analysis && (
-          <ExplainabilityFigure dimensions={commit.analysis.indicators} />
-        )}
       </GridCell>
 
       <CenterGridCell span={12}>
@@ -566,101 +553,6 @@ const DimensionIcons: {[name: string]: IconDefinition} = {
   Size: faRuler,
   History: faHistory,
 };
-
-interface ExplainabilityFigureProps {
-  dimensions: NonNullable<CommitDetails_commit['analysis']>['indicators'];
-}
-
-const ExplainabilityFigure: React.FC<ExplainabilityFigureProps> = ({
-  dimensions,
-}) => {
-  let doughnut: any = useRef(null);
-  useEffect(() => {
-    if (doughnut == null) {
-      return;
-    }
-
-    const data = Object.values(dimensions).map(
-      (n) => Math.round((n || 0) * 1000) / 10
-    );
-    const total = data.reduce((a, b) => a + b, 0);
-    const ctxChart = doughnut.current.getContext('2d');
-    new Chart(ctxChart, {
-      type: 'polarArea',
-      data: {
-        labels: Object.keys(dimensions),
-        datasets: [
-          {
-            borderColor: 'rgba(255,255,255,0.56)',
-            hoverBorderColor: 'rgba(129,112,174,0.26)',
-            backgroundColor: data.map((n) => (n / total) * 100).map(riskColor),
-            data: data,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        aspectRatio: 1.5,
-        tooltips: {
-          displayColors: false,
-          bodyFontSize: 16,
-        },
-        legend: {
-          display: false,
-        },
-        scale: {
-          ticks: {
-            display: false,
-            stepSize: Math.max(...data) / 3,
-          },
-        },
-      },
-    });
-  }, [dimensions]);
-
-  return (
-    <>
-      {Object.values(DimensionIcons).map((icon, i) => (
-        <div key={i} className="radar-box noselect">
-          <div className={'radar-box-content radar-box-' + i}>
-            <FontAwesomeIcon icon={icon} size={'lg'} />
-          </div>
-        </div>
-      ))}
-      <canvas style={{position: 'absolute'}} ref={doughnut} />
-    </>
-  );
-};
-
-function riskColor(risk: number): string {
-  risk = Math.round(risk / 10);
-  if (risk < 0) risk = 0;
-  // these colors match the same scale SCSS i.e., .risk-points
-  switch (risk) {
-    case 0:
-      return 'rgba(124,179,66,0.50)';
-    case 1:
-      return 'rgba(174,213,129,0.50)';
-    case 2:
-      return 'rgba(220,231,117,0.50)';
-    case 3:
-      return 'rgba(205,220,57,0.50)';
-    case 4:
-      return 'rgba(255,167,38,0.50)';
-    case 5:
-      return 'rgba(251,140,0,0.50)';
-    case 6:
-      return 'rgba(239,108,0,0.50)';
-    case 7:
-      return 'rgba(230,81,0,0.50)';
-    case 8:
-      return 'rgba(229,57,53,0.50)';
-    case 9:
-      return 'rgba(183,28,28,0.50)';
-    default:
-      return 'rgba(213,0,0,0.50)';
-  }
-}
 
 const MetricDict = {
   ns: 'Number of modified subsystems',
