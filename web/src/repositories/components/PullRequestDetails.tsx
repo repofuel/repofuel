@@ -6,7 +6,6 @@ import {GridCell, GridRow} from '@rmwc/grid';
 import {Card} from '@rmwc/card';
 import {Typography} from '@rmwc/typography';
 import 'github-markdown-css/github-markdown.css';
-import ReactMarkdown from 'react-markdown';
 import {useLazyLoadQuery} from 'react-relay/hooks';
 import graphql from 'babel-plugin-relay/macro';
 import {Page404, Page404Custom} from '../../ui/Page404';
@@ -103,11 +102,6 @@ export const PullRequestDetails: React.FC<PullRequestDetailsProps> = (
               </span>
             </Typography>
           </div>
-          {pull.source.body && (
-            <div className="markdown-body" style={{margin: '30px'}}>
-              <ReactMarkdown source={pull.source.body} />
-            </div>
-          )}
         </Card>
       </GridCell>
       <GridCell span={12}>
