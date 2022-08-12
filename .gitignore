@@ -5,3 +5,7 @@ venv
 /db
 /keys
 /configs
+/models
+/repos
+
+__debug_bin
